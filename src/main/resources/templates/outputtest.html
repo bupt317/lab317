@@ -5,6 +5,12 @@
     <title>output</title>
 </head>
 <body>
-<span th:text="${code}"></span>
+<form action="/outputtest" method="post">
+    <p>Name:
+        <label>
+            <input type="text" name="username1">
+        </label>
+    </p>
+    <input type="submit" value="提交"> </form>
 </body>
 </html>

@@ -7,7 +7,8 @@
     </select>
 
     <insert id="insertuser" parameterType="com.bupt317.study.lab_manager.pojo.mybatis.User">
-        INSERT INTO user(authority,username,password) VALUE(#{authority},#{username},#{password})
+        INSERT INTO user(authority,username,password)
+        VALUE(#{authority},#{username},#{password})
     </insert>
 
     <delete id="deletebyid" parameterType="java.lang.Integer">
@@ -17,5 +18,9 @@
     <update id="updatebyid" parameterType="com.bupt317.study.lab_manager.pojo.mybatis.User">
         UPDATE user SET authority=#{authority},password=#{password} WHERE id=#{id}
     </update>
+
+    <select id="selectall" resultType="com.bupt317.study.lab_manager.pojo.mybatis.User">
+        SELECT * FROM user
+    </select>
 
 </mapper>

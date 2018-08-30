@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>项目管理</title>
+    <link rel="stylesheet" type="text/css" href="/css/program.css">
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <script>
+        function clean() {
+            sessionStorage.clear();
+        }
+
+        function isSession() {
+            username = sessionStorage.getItem("Username");
+            if (username == null){
+                window.location.replace("/index")
+            }
+        }
+
+        function load() {
+            $.ajax({
+                type: "post",
+                url: "/project",
+                data: {},
+                dataType:'json',
+                success: function (data) {
+                    $.each(data, function (i, val) {
+                        create_div(val, i);
+                    });
+                }
+            });
+        }
+
+        function create_div(item, num) {
+            content = document.getElementById("List");
+            create_Div = document.createElement("div");
+            ul = document.createElement('ul');
+            content.appendChild(create_Div);
+            create_Div.appendChild(ul);
+            create_Div.style.position = "absolute";
+            create_Div.style.top = (num * 260 + 70) + "px";
+            create_Div.style.height = "200px";
+            create_Div.innerHTML = '<ul class="programList_content">' +
+                '<li style="line-height: 30px">' + "项目名称：" + item.projectname + '</li>' +
+                '<li style="line-height: 30px">' + "项目人员：" + item.member + '</li>' +
+                '<li style="line-height: 30px">' + "项目信息：" + item.projectmessage + '</li>' +
+                '<li style="line-height: 30px">' + "起始日期：" + item.starttime + '</li>' +
+                '<li style="line-height: 30px">' + "截止日期：" + item.endtime + '</li>' +
+                '<li style="line-height: 30px">' + "项目状态：" + item.projectstate + '</li>' +
+                '<button class="alter" onclick="window.location.href=\'../../static/u/program/alter.html\'">修改</button>' +
+                '<button class="graph" onclick="window.location.href=\'program/graph.html\'">花销图表</button>' +
+                '</ul>';
+            content.style.height = (330 + 260 * num) + "px";
+        }
+    </script>
+</head>
+<body>
+<script>isSession()</script>
+<div class="background">
+    <img src="/picture/background.jpg">
+
+    <div class="guide">
+        欢迎使用317财务管理系统
+        <a href="home">
+            <div class="home_logo">
+                <img src="/picture/home_logo.png">
+                <span>主页</span>
+            </div>
+        </a>
+
+        <a href="index" onclick="clean()">
+            <div class="logout_logo">
+                <img src="/picture/exit_logo.png">
+                <span>退出</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="programList" id="List">
+        <div class="programList_title">项目管理</div>
+
+        <a href="program/new">
+            <div class="new">
+                <img src="/picture/add_logo.png">
+                <span>新建项目</span>
+            </div>
+        </a>
+    </div>
+</div>
+<script>
+    load();
+</script>
+</body>
+</html>

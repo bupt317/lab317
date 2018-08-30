@@ -3,6 +3,8 @@ package com.bupt317.study.lab_manager.mapper;
 import com.bupt317.study.lab_manager.pojo.mybatis.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 //将mapper对象声明为托管对象
 public interface UserMapper
@@ -18,5 +20,8 @@ public interface UserMapper
 
     //根据id更新用户权限和密码
     int updatebyid(User user);
+
+    //查询所有用户
+    List<User> selectall();
 
 }

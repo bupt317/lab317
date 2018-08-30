@@ -1,37 +1,64 @@
 package com.bupt317.study.lab_manager.controller;
 
-import com.bupt317.study.lab_manager.pojo.mybatis.User;
+import com.bupt317.study.lab_manager.pojo.mybatis.Project;
+import com.bupt317.study.lab_manager.service.ProjectService;
 import com.bupt317.study.lab_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class FirstProjectController
 {
     @Autowired
     UserService userService;
+    @Autowired
+    ProjectService projectService;
 
-    //登陆验证返回
-    @RequestMapping(value = ("/inputtest"),method = RequestMethod.POST)
-    public String toInputtest(@RequestParam(value = "username",required = true) String username, @RequestParam(value = "password",required = true) String password, Model model)
+    //访问index页面
+    @RequestMapping(value = "/index")
+    public String toindex()
     {
-        User user=new User();
-        int id=Integer.parseInt(password);
-        user.setId(id);
-        user.setAuthority("M");
-        user.setUsername("asdasdasda");
-        user.setPassword(username);
-        String code=userService.updateuser(user);
-        model.addAttribute("code",code);
-        return "/outputtest";
+        return "/index";
     }
 
-    //插入数据返回
-    //@RequestMapping(value = ("/inputtest"),method = RequestMethod.POST)
-    //public String to
+    //跳转home页面
+    @RequestMapping(value = "/home")
+    public String tohome()
+    {
+        return "/home";
+    }
+
+    //program页面跳转
+    @RequestMapping(value = "/program")
+    public String toprogram()
+    {
+        return "/program";
+    }
+
+    //登陆验证返回
+    @RequestMapping(value = ("/ajax_login"),method = RequestMethod.POST)
+    @ResponseBody
+    public String tologin(String Username,String password,String authority)
+    {
+        String result=userService.login(Username,password);
+        return result;
+    }
+
+    //program页面处理
+    @RequestMapping(value = ("/project"),method = RequestMethod.POST)
+    @ResponseBody
+    public List<Project> getprogram()
+    {
+        List<Project> projects=new ArrayList<Project>();
+        projects=projectService.getall();
+        return projects;
+    }
+
 
 }
