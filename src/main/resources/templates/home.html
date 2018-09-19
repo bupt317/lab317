@@ -4,21 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>主页</title>
     <link rel="stylesheet" type="text/css" href="/css/home.css">
-    <script th:src="@{/js/jquery-3.3.1.js}"></script>
-    <script>
-        function clean() {
-            sessionStorage.clear();
-        }
-        function isSession() {
-            username = sessionStorage.getItem("Username");
-            if (username == null){
-                window.location.replace("/index")
-            }
-        }
-    </script>
 </head>
 <body>
-<script>isSession()</script>
 <div class="background">
     <img src="/picture/background.jpg">
     <div class="logo">
@@ -28,7 +15,7 @@
     <div class="welcome">
         欢迎使用317财务管理系统
     </div>
-    <a href="http://localhost:8888/index" onclick="clean()">
+    <a th:href="@{/login_out}">
         <div class="logout">
             注销登录
         </div>
@@ -40,25 +27,25 @@
         </div>
     </a>
 
-    <a href="program">
+    <a th:href="@{/program}">
         <div class="program">
             项目管理
         </div>
     </a>
 
-    <a href="">
+    <a th:href="@{/usermanager}">
         <div class="user">
             用户管理
         </div>
     </a>
 
-    <a href="">
+    <a th:href="@{/bill}">
         <div class="bill">
             报销系统
         </div>
     </a>
 
-    <a href="graph">
+    <a href="">
         <div class="finance">
             财务系统
         </div>

@@ -6,16 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/css/program.css">
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
     <script>
-        function clean() {
-            sessionStorage.clear();
-        }
-
-        function isSession() {
-            username = sessionStorage.getItem("Username");
-            if (username == null){
-                window.location.replace("/index")
-            }
-        }
+        var projectname = null;
 
         function load() {
             $.ajax({
@@ -24,7 +15,8 @@
                 data: {},
                 dataType:'json',
                 success: function (data) {
-                    $.each(data, function (i, val) {
+                    $.each(data, function (i, val)
+                    {
                         create_div(val, i);
                     });
                 }
@@ -34,7 +26,7 @@
         function create_div(item, num) {
             content = document.getElementById("List");
             create_Div = document.createElement("div");
-            ul = document.createElement('ul');
+            ul = document. createElement('ul');
             content.appendChild(create_Div);
             create_Div.appendChild(ul);
             create_Div.style.position = "absolute";
@@ -47,41 +39,49 @@
                 '<li style="line-height: 30px">' + "起始日期：" + item.starttime + '</li>' +
                 '<li style="line-height: 30px">' + "截止日期：" + item.endtime + '</li>' +
                 '<li style="line-height: 30px">' + "项目状态：" + item.projectstate + '</li>' +
-                '<button class="alter" onclick="window.location.href=\'../../static/u/program/alter.html\'">修改</button>' +
-                '<button class="graph" onclick="window.location.href=\'program/graph.html\'">花销图表</button>' +
+                '<button class="alter" id="alter" onclick="alter(this)">修改</button>' +
+                '<button class="graph" id="graph" name="graph" onclick="graph(this)">花销图表</button>' +
                 '</ul>';
             content.style.height = (330 + 260 * num) + "px";
+            var button = document.getElementById("graph");
+            button.setAttribute("id", item.id);
+            button.setAttribute("name", item.projectname);
+            var button = document.getElementById("alter");
+            button.setAttribute("id", item.id);
+        }
+
+        function graph(element) {
+            console.log(element);
+            window.location.href='/secondpage/graph';
+            window.sessionStorage.setItem('id',element.id);
+            window.sessionStorage.setItem('projectname', element.name);
+        }
+
+        function alter(element) {
+            window.location.href='/secondpage/alter';
+            window.sessionStorage.setItem('id',element.id);
         }
     </script>
 </head>
 <body>
-<script>isSession()</script>
 <div class="background">
     <img src="/picture/background.jpg">
 
     <div class="guide">
         欢迎使用317财务管理系统
-        <a href="home">
+        <a th:href="@{/home}">
             <div class="home_logo">
                 <img src="/picture/home_logo.png">
                 <span>主页</span>
-            </div>
-        </a>
-
-        <a href="index" onclick="clean()">
-            <div class="logout_logo">
-                <img src="/picture/exit_logo.png">
-                <span>退出</span>
             </div>
         </a>
     </div>
 
     <div class="programList" id="List">
         <div class="programList_title">项目管理</div>
-
-        <a href="program/new">
+        <a th:href="@{/secondpage/new}">
             <div class="new">
-                <img src="/picture/add_logo.png">
+                <img src=" /picture/add_logo.png">
                 <span>新建项目</span>
             </div>
         </a>

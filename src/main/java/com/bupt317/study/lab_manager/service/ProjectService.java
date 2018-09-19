@@ -13,6 +13,21 @@ public class ProjectService
     @Autowired
     private ProjectMapper projectMapper;
 
+    //生成project类
+    public Project projectbuilder(int id,String projectname, String member, String projectmessage, String starttime, String endtime, String projectstate)
+    {
+       Project project=new Project();
+       project.setId(id);
+       project.setProjectname(projectname);
+       project.setMember(member);
+       project.setProjectmessage(projectmessage);
+       project.setStarttime(starttime);
+       project.setEndtime(endtime);
+       project.setProjectstate(projectstate);
+       project.setOther("no message");
+       return project;
+    }
+
     //添加工程
     public String addproject(Project project)
     {

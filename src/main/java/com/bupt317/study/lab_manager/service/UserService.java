@@ -1,11 +1,9 @@
 package com.bupt317.study.lab_manager.service;
 
 import com.bupt317.study.lab_manager.mapper.UserMapper;
-//import org.apache.tomcat.jni.User;
 import com.bupt317.study.lab_manager.pojo.mybatis.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -26,7 +24,9 @@ public class UserService
         if (user==null)
             return "N";
         else if (user.getPassword().equals(password))
-            return user.getAuthority();
+            {
+                return user.getAuthority();
+            }
         else
             return "N";
     }
@@ -73,6 +73,27 @@ public class UserService
     {
         List<User> users=userMapper.selectall();
         return users;
+    }
+
+    //创建user对象
+    public User userbuilder(int id,String authority,String username,String password)
+    {
+        User user=new User();
+        user.setId(id);
+        user.setAuthority(authority);
+        user.setUsername(username);
+        user.setPassword(password);
+        return user;
+    }
+
+    //检查用户名是否重合
+    public String checkusername(String username)
+    {
+        User user=userMapper.selectbyusername(username);
+        if (user==null)
+            return "Y";
+        else
+            return "N";
     }
 
 }

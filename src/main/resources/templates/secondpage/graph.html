@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>花销图表</title>
+    <link rel="stylesheet" type="text/css" href="/css/graph.css">
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <script>
+        function graph() {
+            data = "projectname="+window.sessionStorage.getItem("projectname");
+            money = [];
+            date = [];
+            var graph = document.getElementById("graph");
+            graph.width = 800;
+            graph.height = 460;
+            graph.style.border = "1px solid black";
+            var ctx = graph.getContext("2d");
+
+            $.ajax({
+                type: "post",
+                url: "/program_graph",
+                contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                data: data,
+                dataType: "json",
+                success: function (data) {
+                    $.each(data, function (i, val) {
+                        money[i] = val.money;
+                        date[i] = val.spenddate;
+                    });
+                    paintLine(money, "#f00")
+                }
+            });
+
+            function paintLine(data, color) {
+                var maxMoney = Math.max.apply(null, data);
+                var padding = 50,
+                    x0 = padding,
+                    y0 = graph.height - padding,
+                    xArrow_x = padding,
+                    xArrow_y = padding,
+                    yArrow_x = graph.width - padding,
+                    yArrow_y = graph.height - padding,
+                    arrowWidth = 10,
+                    xLength = graph.width - 2*padding - arrowWidth,
+                    yLength = graph.height - 2*padding - arrowWidth,
+                    pointsWidth = xLength/(data.length + 1);
+
+                ctx.beginPath();
+
+                ctx.moveTo(x0, y0);
+                ctx.lineTo(xArrow_x, xArrow_y);
+                ctx.moveTo(xArrow_x, xArrow_y);
+                ctx.lineTo(xArrow_x - arrowWidth, xArrow_y + arrowWidth);
+                ctx.moveTo(xArrow_x, xArrow_y);
+                ctx.lineTo(xArrow_x + arrowWidth, xArrow_y + arrowWidth);
+                ctx.fillText("时间", 740, 435);
+
+                ctx.moveTo(x0, y0);
+                ctx.lineTo(yArrow_x, yArrow_y);
+                ctx.moveTo(yArrow_x, yArrow_y);
+                ctx.lineTo(yArrow_x - arrowWidth, yArrow_y - arrowWidth);
+                ctx.moveTo(yArrow_x, yArrow_y);
+                ctx.lineTo(yArrow_x - arrowWidth, yArrow_y + arrowWidth);
+                ctx.fillText("金额", 15, 65);
+
+                ctx.stroke();
+                ctx.beginPath();
+
+                for (var i = 0; i < data.length; i++) {
+                    ctx.font="12px Arial";
+                    var pointX = padding + (i + 1) * pointsWidth;
+                    var pointY = padding + arrowWidth + (1 - data[i]/maxMoney) * yLength;
+                    ctx.lineTo(pointX, pointY);
+                    var text = ctx.measureText(money[i]);
+                    ctx.fillText(money[i],pointX-text.width-5,pointY);
+                    ctx.fillText(date[i], pointX-20, 425);
+                }
+                ctx.font="18px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(window.sessionStorage.getItem("projectname"), 400, 25);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            }
+
+        }
+
+        function back() {
+            window.sessionStorage.removeItem("id");
+            window.sessionStorage.removeItem("projectname");
+            window.location.href='/program';
+        }
+
+    </script>
+</head>
+<body>
+<div class="background">
+    <img src="/picture/background.jpg">
+
+    <div class="guide">
+        欢迎使用317财务管理系统
+        <a th:href="@{/home}">
+            <div class="home_logo">
+                <img src="/picture/home_logo.png">
+                <span>主页</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="programgraph">
+        <div class="programgraph_title">项目花销</div>
+        <div class="programgraph_flot" id="flot-placeholder">
+            <canvas id="graph"></canvas>
+        </div>
+        <div class="programgraph_button">
+            <button style="position: absolute; left: 100px">下载报表</button>
+            <button style="position: absolute; right: 100px" onclick="back()">返回</button>
+        </div>
+    </div>
+</div>
+<script>graph()</script>
+</body>
+</html>
