@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+</head>
+<body>
+    <script src="js/jquery-3.3.1.js"></script>
+    <div>
+        <h3>欢迎用户：<input type="text" name="user" value="" id="user_name" disabled="true">登陆</h3>
+    </div>
+    <div>
+        <h4>用户列表</h4>
+    </div>
+    <form action="" method="post" class="form4">
+        <table>
+        </table>
+    </form>
+    <div  style="background:#ff6700; width: 600px; height: 400px;position: absolute;top: 30%;left:30%; display:none; padding: 10px;box-sizing: border-box;" class="userInfo">
+        <h2  style="text-align: center">个人信息设置</h2>
+        <form  class="form-inline" action="" methd="get" id="form5">
+            <div class="form-group" style="padding-bottom:10px;">
+                <label for="exampleInputEmail1">姓名</label>
+                <input type="text" class="form-control"  name="stu_name"  id="exampleInputEmail1" placeholder="">
+                <label for="exampleInputPassword1">学号</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+            </div>
+            <div  class="form-group" style="padding-bottom:10px;">
+                性别：
+                <label>
+                    <input type="radio"  id="optionsRadios1" name="sex" value="male" checked>
+                    男
+                </label>
+                <label>
+                    <input type="radio" name="sex" value="female" id="optionsRadios2" >
+                    女
+                </label>
+
+            </div>
+            <div class="form-group" style="padding-bottom:10px;">
+                <label for="exampleInputEmail1">导师姓名</label>
+                <input type="text" class="form-control" name="teacher_name" id="exampleInputEmail1" placeholder="">
+                <label for="exampleInputPassword1">学号</label>
+                <input type="text" name="sutdentid" class="form-control" id="exampleInputPassword1" placeholder="">
+            </div>
+            <div class="form-group" style="padding-bottom:10px;">
+                <label for="exampleInputEmail1">专业名称</label>
+                <input type="text" class="form-control"name="major_name" id="exampleInputEmail1" placeholder="">
+                <label for="exampleInputPassword1">班级</label>
+                <input type="text" class="form-control"  name="class_num" id="exampleInputPassword1" placeholder="">
+            </div>
+            <div class="form-group" style="padding-bottom:10px;width: 100%;">
+                <label for="exampleInputEmail1">备注</label>
+                <textarea class="form-control" cols ="35" row="10" name= "beizhu " ></textarea>
+
+            </div>
+            <div class="form-group" style="padding-left:30px;padding: right 30px;width:100%; ">
+                <button type="button" id="save" class="btn btn-primary" style="float: left;">保存</button>
+                <button type="button" id="cancel" class="btn btn-primary" style="margin-left: 200px">取消</button>
+            </div>
+        </form>
+        <form action="" methd="get" id="form5">
+            <table>
+                <tr>
+                    <td>
+                        姓名：<input type="text" name="stu_name" />
+                    </td>
+                    <td>
+                        性别：<input type = "radio" name="sex" value="male">男 <input type = "radio"name="sex" value="female">女
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        学号：<input type="text" name="sutdentid" />
+                    </td>
+                    <td>
+                        导师姓名：<input type="text" name="teacher_name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        专业名称：<input type="text" name="major_name" />
+                    </td>
+                    <td>
+                        班级：<input type="text" name="class_num" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        备注 <textarea cols ="35" row="10" name= "beizhu "></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" id="save" class="btn btn-primary">保存</button>
+                    </td>
+                    <td>
+                        <button type="button" id="cancel" class="btn btn-primary">取消</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div  style="background:#ff6700; width: 600px; height: 400px;position: absolute;top: 30%;left:30%; display:none; " class="authoritySet">
+        <h2>用户权限设置</h2>
+        <table>
+            <tr>
+                <td>
+                    设为管理员权限:<input type="radio" name="authority" value="管理管权限"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    设为普通用户权限:<input type="radio" name="authority" value="普通用户权限"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" name="operation" value="confirm" id="btnconfirm" >确认</button>
+                </td>
+                <td>
+                    <button type="button" name="operation" value="cancel" id="btncancel">取消</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

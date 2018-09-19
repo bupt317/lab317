@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BUPT317报账管理系统</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <script src="js/jquery-3.3.1.js"></script>
+    <header>
+        您好，欢迎进入BUPT317报账管理系统
+    </header>
+    <div class="content">
+        <div class="content-left">
+            <ul>
+                <li onclick="show(0)">费用报销</li>
+                <li onclick="show(1)">报销一览</li>
+                <li onclick="show(2)">费用审核</li>
+            </ul>
+        </div>
+        <div class="content-right">
+            <div class="feiyongbaoxiao">
+                <form action="" method="post" enctype="multipart/form-data" id="form1">
+                    <div>费用报销</div>
+                    <div>
+                        报销类别:<input type="text" name="baoxiao_type" / >   发票:<input type="file" name="fapiao" />
+                    </div>
+                    <div>
+                        付款方式:<input type="text" name="fukuan_type"  / >   买卖双方:<input type="text" name="shuangfang_name" / >
+                    </div>
+                    <div>
+                        时间:<input type="date" name="time"  >  报销状态:<input type="text" name="time" / >
+                    </div>
+                    <div>
+                        具体内容:<textarea cols ="35" row="10" name= "jutineirong" ></textarea>
+                    </div>
+                    <div>
+                        <button type="button" id="submit" >提交</button>
+                    </div>
+                </form>
+            </div>
+            <div class="baoxiaoyilan" style="display: none">
+                <div>报销一览</div>
+                <form action=" " method="post"  class="form2" >
+                    <table>
+                        <caption>报销筛选</caption>
+                        <tr>
+                            <td>
+                                报销类别:<input type="text" name="baoxiao_type" / >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                时间:<input type="date" name="time_before" / >   至 :<input type="date" name="time_after" / >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                金额:<input type="text" name="money_before" / >   至 :<input type="text" name="money_after" / >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                报销状态:     <input type="text" name="baoxiao_zhuangtai" / >
+                            </td>
+                            <td>
+                                发票状态:     <input type="text" name="fapiao_zhuangtai" / >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="button"id="shaixuan">筛选</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                筛选结果：
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="feiyongshenhe" style="display: none">
+                <form action=" " method="get" class="form3">
+                    <table>
+                        <caption>报销审核</caption>
+                        <tr>
+                            <td>
+                                <button type="button" id="chaxun" value="查询表单列表">查询表单</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="../js/reimburse_pay.js"></script>
+</body>
+</html>
