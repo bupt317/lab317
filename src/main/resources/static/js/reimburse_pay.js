@@ -1,23 +1,23 @@
-<scirpt>
-    let feiyongbaoxiao = document.querySelector('.feiyongbaoxiao')
-    let baoxiaoyilan = document.querySelector('.baoxiaoyilan')
-    let feiyongshenhe = document.querySelector('.feiyongshenhe')
+
+    let feiyongbaoxiao = document.querySelector('.feiyongbaoxiao');
+    let baoxiaoyilan = document.querySelector('.baoxiaoyilan');
+    let feiyongshenhe = document.querySelector('.feiyongshenhe');
 
     function show(num){
         if(num ==0){
-        feiyongbaoxiao.style.display = 'block';
-        baoxiaoyilan.style.display = 'none';
-        feiyongshenhe.style.display = 'none';
+            feiyongbaoxiao.style.display = 'block';
+            baoxiaoyilan.style.display = 'none';
+            feiyongshenhe.style.display = 'none';
         }
         else if(num ==1){
-        feiyongbaoxiao.style.display = 'none';
-        baoxiaoyilan.style.display = 'block';
-        feiyongshenhe.style.display = 'none';
+            feiyongbaoxiao.style.display = 'none';
+            baoxiaoyilan.style.display = 'block';
+            feiyongshenhe.style.display = 'none';
         }
         else if(num==2){
-        feiyongbaoxiao.style.display = 'none';
-        baoxiaoyilan.style.display = 'none';
-        feiyongshenhe.style.display = 'block';
+            feiyongbaoxiao.style.display = 'none';
+            baoxiaoyilan.style.display = 'none';
+            feiyongshenhe.style.display = 'block';
         }
     };
     $(function(){
@@ -79,5 +79,66 @@
             }
         });
     });
-
-</scirpt>
+    var   claimInput='';
+    $(
+        function(){
+            $('#shaixuan').click(function(){
+                $.ajax({
+                    url:"../1.js",
+                    type:"post",
+                    dataType:"json",
+                    data:$('.form2').serialize(),
+                    success:function(data){
+                        console.log(data);
+                        for(item in data){
+                            claimInput+=`<tr>
+                                            <td>
+                                              姓名：<input type="text" value="${data[item].name}" disabled="true">
+                                             </td>
+                                            <td>
+                                               报销单号：<input type="text" value="${data[item].claimNum}" disabled="true">
+                                             </td>
+                                         </tr>`
+                        };
+                    }
+                });
+             });
+            $('.form2  table ').after(claimInput);
+        }
+    );
+    var   claimList='';
+    $(
+        function(){
+            $('#chaxun').click(function(){
+                console.log(1);
+                $.ajax({
+                    url:"../1.js",
+                    type:"post",
+                    dataType:"json",
+                    success:function(data){
+                        console.log(data);
+                        for(itemList in data){
+                            claimList+=`<tr>
+                                          <td>
+                                            姓名：<input type="text" name="baoxiaodan" value="${data[itemList].name}" disabled="true">
+                                          </td>
+                                           <td>
+                                             报销单号：<input type="text" name="baoxiaodan" value="${data[itemList].claimListNum}" disabled="true">
+                                           </td>
+                                           <td>
+                                             <button type="button" name="confirm">确认</button>
+                                           </td>
+                                           <td>
+                                               <button type="button" name="delete">删除</button>
+                                           </td>
+                                           <td>
+                                               <button type="button" name="change">修改</button>
+                                           </td>
+                                          </tr>`
+                        };
+                    }
+                });
+            });
+        $('.form3  table tr').after(claimList);
+        }
+    );
