@@ -11,22 +11,7 @@
         layui.use('element', function(){
             var element = layui.element;
         });
-    ///////////////////// 获取登录用户名///////////////////////////
-        layui.use("layer", function () {
-            username = "username="+sessionStorage.getItem('Username');
 
-            $.ajax({
-                type:"post",
-                url:"/u/home_data",
-                contentType: "application/x-www-form-urlencoded;charset=utf-8",
-                data:username,
-                dataType:"json",
-                success:function (obj) {
-                    $("#name").text(obj.name);
-                }
-            });
-        });
-     //////////////////////////////////////////////////////////////
         layui.use('carousel', function(){
             var carousel = layui.carousel;
             //建造实例
@@ -60,7 +45,7 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    欢迎：<span  id="name"></span>
+                    欢迎：<span><title sec:authentication="name"></title></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
