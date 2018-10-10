@@ -11,7 +11,6 @@
         layui.use('element', function(){
             var element = layui.element;
         });
-        var projectname = null;
 
         function clean() {
             sessionStorage.clear();
@@ -26,12 +25,12 @@
 
         function graph(element) {
             sessionStorage.setItem('id', element.id);
-            window.location.href='/u/program/graph';
+            window.location.href='/secondpage/graph';
         }
 
         function alter(element) {
             window.sessionStorage.setItem('id',element.id);
-            window.location.href='/u/program/alter';
+            window.location.href='/secondpage/alter';
         }
 
         function load_project(item, num) {
@@ -89,7 +88,7 @@
         layui.use('laypage', function(){
             $.ajax({
                 type: "post",
-                url: "/u/project",
+                url: "/project",
                 data: {},
                 dataType:'json',
                 success: function (data) {
@@ -158,8 +157,8 @@
                 <li class="layui-nav-item">
                     <a class="" href="javascript:;">项目管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/u/program">项目列表</a></dd>
-                        <dd><a href="/u/program/new">新建项目</a></dd>
+                        <dd><a href="/program">项目列表</a></dd>
+                        <dd><a href="/secondpage/new">新建项目</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
