@@ -36,7 +36,7 @@
 
             $.ajax({
                 type:"post",
-                url:"/u/program_alter1",
+                url:"/u/program_alter1", ///////////////////  根据id获取数据，用于重写数据 //////////////////
                 contentType: "application/x-www-form-urlencoded;charset=utf-8",
                 data:id,
                 dataType:"json",
@@ -70,7 +70,7 @@
                     "&starttime="+data.field.starttime+"&endtime="+data.field.endtime+"&projectstate="+data.field.projectstate;
                 $.ajax({
                     type: "post",
-                    url: "/u/program_alter2",
+                    url: "/program_alter",
                     contentType: "application/x-www-form-urlencoded;charset=utf-8",
                     data: form_data,
                     dataType: "text",
@@ -139,8 +139,8 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">项目管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/u/program">项目列表</a></dd>
-                        <dd><a href="/u/program/new">新建项目</a></dd>
+                        <dd><a href="/program">项目列表</a></dd>
+                        <dd><a href="/secondpage/new">新建项目</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
