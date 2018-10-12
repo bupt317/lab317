@@ -17,7 +17,7 @@
             //执行一个laydate实例
             laydate.render({
                 elem: '#starttime',//指定元素
-                format: 'yyyy年MM月dd日'
+                format: 'yyyy-MM-dd'
             });
         });
 
@@ -26,31 +26,30 @@
             //执行一个laydate实例
             laydate.render({
                 elem: '#endtime',//指定元素
-                format: 'yyyy年MM月dd日'
+                format: 'yyyy-MM-dd'
             });
         });
 
         layui.use("layer", function () {
-            var form = layui.form;
             var id ='id='+ sessionStorage.getItem('id');
 
             $.ajax({
                 type:"post",
-                url:"/u/program_alter1", ///////////////////  根据id获取数据，用于重写数据 //////////////////
+                url:"/program_byid", ///////////////////  根据id获取数据，用于重写数据 //////////////////
                 contentType: "application/x-www-form-urlencoded;charset=utf-8",
                 data:id,
                 dataType:"json",
                 success:function (obj) {
-
+                    console.log(obj);
                     var projectstate = "";
 
-                    if (obj.projectstate == "已结项"){
-                        projectstate = "已结项";
+                    if (obj.projectstate == "Y"){
+                        projectstate = "Y";
                     } else {
-                        projectstate = "未结项";
+                        projectstate = "N";
                     }
 
-                    form.val('reload',{
+                    layui.form.val('reload',{
                         "projectname": obj.projectname,
                         "member": obj.member,
                         "starttime": obj.starttime,
@@ -66,7 +65,7 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function(data){
-                var form_data = "projectname="+data.field.projectname+"&member="+data.field.member+"&projectmessage="+data.field.projectmessage+
+                var form_data = "id="+sessionStorage.getItem('id')+"&projectname="+data.field.projectname+"&member="+data.field.member+"&projectmessage="+data.field.projectmessage+
                     "&starttime="+data.field.starttime+"&endtime="+data.field.endtime+"&projectstate="+data.field.projectstate;
                 $.ajax({
                     type: "post",
@@ -77,7 +76,7 @@
                     success: function (site) {
                         if (site == "Y"){
                             layer.msg("修改成功！");
-                            setTimeout(function () {window.location.replace("/u/program");}, 2000);
+                            setTimeout(function () {window.location.replace("/program");}, 2000);
                         }else {
                             layer.msg("通信错误");
                         }
@@ -106,7 +105,7 @@
         <div class="layui-logo" style="font-size: 20px;">317财务管理系统</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="/u/home">主页</a></li>
+            <li class="layui-nav-item"><a href="/home">主页</a></li>
             <li class="layui-nav-item"><a href="">帮助</a></li>
             <li class="layui-nav-item"><a href="">用户</a></li>
             <li class="layui-nav-item">
@@ -208,8 +207,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">项目状态</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="projectstate" value="未结项" title="未结项">
-                    <input type="radio" name="projectstate" value="已结项" title="已结项">
+                    <input type="radio" name="projectstate" value="N" title="未结项">
+                    <input type="radio" name="projectstate" value="Y" title="已结项">
                 </div>
             </div>
             <div class="layui-form-item">

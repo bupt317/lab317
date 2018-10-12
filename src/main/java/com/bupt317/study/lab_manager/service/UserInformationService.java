@@ -22,9 +22,9 @@ public class UserInformationService
         userInformation.setStudentid(studentid);
         int x=userInformationMapper.insertuserinformation(userInformation);
         if (x==1)
-            return "y";
+            return "Y";
         else
-            return "n";
+            return "N";
     }
 
     //随user删除而删除
@@ -32,9 +32,9 @@ public class UserInformationService
     {
         int x=userInformationMapper.deletebyusername(username);
         if (x==1)
-            return "y";
+            return "Y";
         else
-            return "n";
+            return "N";
     }
 
     //更新用户信息
@@ -42,9 +42,9 @@ public class UserInformationService
     {
         int x=userInformationMapper.updatebyid(userInformation);
         if (x==1)
-            return "y";
+            return "Y";
         else
-            return "n";
+            return "N";
     }
 
     //根据用户名查询
@@ -59,6 +59,26 @@ public class UserInformationService
     {
         List<UserInformation> userInformations=userInformationMapper.selectall();
         return userInformations;
+    }
+
+    //根据id查询
+    public UserInformation getbyid(int id)
+    {
+        UserInformation userInformation=userInformationMapper.selectbyid(id);
+        return userInformation;
+    }
+
+    //构建pojo
+    public UserInformation userinfobuilder(int id,String name,String studentid,String idcard,String birthday)
+    {
+        UserInformation userInformation=new UserInformation();
+        userInformation.setName(name);
+        userInformation.setStudentid(studentid);
+        userInformation.setIdcard(idcard);
+        userInformation.setBirthday(birthday);
+        userInformation.setId(id);
+        userInformation.setUsername("unkonwn");
+        return userInformation;
     }
 
 }

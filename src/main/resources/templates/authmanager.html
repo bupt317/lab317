@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>项目管理</title>
+    <title>权限管理</title>
     <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css">
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
     <script th:src="@{/js/layui/layui.js}"></script>
@@ -13,19 +13,53 @@
             var element = layui.element;
         });
 
-        function graph(element) {
-            sessionStorage.setItem('projectname', element.id);
-            console.log(window.sessionStorage.getItem("projectname"));
-            window.location.href='/secondpage/graph';
+        layui.use('layer', function(){
+            var layer = layui.layer;
+        });
+
+        function levelup(element) {
+            $.ajax({
+                type: "post",
+                url: "/level_up",
+                contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                data: {"id":element.id},
+                dataType: "text",
+                success: function (site) {
+                    if (site == "Y"){
+                        layer.msg("修改成功");
+                        setTimeout(function () {window.location.replace("/authmanager");}, 2000);
+                    }else {
+                        layer.msg("通信错误");
+                    }
+                }
+            });
         }
 
-        function alter(element) {
-            window.sessionStorage.setItem('id',element.id);
-            window.location.href='/secondpage/alter';
-        }
+        function leveldown(element) {
+            $.ajax({
+                type: "post",
+                url: "/level_down",
+                contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                data: {"id":element.id},
+                dataType: "text",
+                success: function (site) {
+                    if (site == "Y"){
+                        layer.msg("修改成功");
+                        setTimeout(function () {window.location.replace("/authmanager");}, 2000);
+                    }else {
+                        layer.msg("通信错误");
+                    }
+                }
+            });
 
+        }
         function load_project(item, num) {
             var site = num % 2;
+            var auth="";
+            if (item.authority=="M")
+                auth="普通用户";
+            else
+                auth="管理员";
             if (site == 0){
                 var content = $("#left-list");
                 var card = $('<div></div>');
@@ -34,20 +68,17 @@
 
                 var card_head = $('<div></div>');
                 card_head.addClass('layui-card-header');
-                card_head.html(item.projectname+"&nbsp;&nbsp;"+
-                    '<a id="alter" onclick="alter(this)"><i class="layui-icon layui-icon-edit" style="font-size: 20px"></i></a>'+"&nbsp;"+
-                    '<a id="graph" onclick="graph(this)"><i class="layui-icon layui-icon-chart-screen" style="font-size: 20px"></i></a>');
+                card_head.html("&nbsp;&nbsp;"+
+                    '<a id="levelup" name="levelup" onclick="levelup(this)" class="layui-btn layui-btn-danger">设为管理</a>'+"&nbsp;"+
+                    '<a id="leveldown" name="leveldown" onclick="leveldown(this)" class="layui-btn layui-btn-normal">设为普通</a>');
                 card_head.appendTo(card);
-                $("#alter").attr("id", item.id);
-                $("#graph").attr("id", item.projectname);
+                $("#levelup").attr("id", item.id);
+                $("#leveldown").attr("id", item.id);
 
                 var card_body = $('<div></div>');
                 card_body.addClass('layui-card-body');
-                card_body.html("起始日期：" + item.starttime + '<br>' +
-                    "截止日期：" + item.endtime + '<br>' +
-                    "参与人员：" + item.member + '<br>' +
-                    "项目信息：" + item.projectmessage + '<br>' +
-                    "项目状态：" + item.projectstate);
+                card_body.html("用户名：" + item.username + '<br>' +
+                    "系统权限：" + auth);
                 card_body.appendTo(card);
             }else {
                 var content2 = $("#right-list");
@@ -57,20 +88,17 @@
 
                 var card_head2 = $('<div></div>');
                 card_head2.addClass('layui-card-header');
-                card_head2.html(item.projectname+"&nbsp;&nbsp;"+
-                    '<a id="alter" name="alter" onclick="alter(this)"><i class="layui-icon layui-icon-edit" style="font-size: 20px"></i></a>'+"&nbsp;"+
-                    '<a id="graph" name="graph" onclick="graph(this)"><i class="layui-icon layui-icon-chart-screen" style="font-size: 20px"></i></a>');
+                card_head2.html("&nbsp;&nbsp;"+
+                    '<a id="levelup" name="levelup" onclick="levelup(this)" class="layui-btn layui-btn-danger">设为管理</a>'+"&nbsp;"+
+                    '<a id="leveldown" name="leveldown" onclick="leveldown(this)" class="layui-btn layui-btn-normal">设为普通</a>');
                 card_head2.appendTo(card2);
-                $("#alter").attr("id", item.id);
-                $("#graph").attr("id", item.projectname);
+                $("#levelup").attr("id", item.id);
+                $("#leveldown").attr("id", item.id);
 
                 var card_body2 = $('<div></div>');
                 card_body2.addClass('layui-card-body');
-                card_body2.html("起始日期：" + item.starttime + '<br>' +
-                    "截止日期：" + item.endtime + '<br>' +
-                    "参与人员：" + item.member + '<br>' +
-                    "项目信息：" + item.projectmessage + '<br>' +
-                    "项目状态：" + item.projectstate);
+                card_body2.html("用户名：" + item.username + '<br>' +
+                    "系统权限：" + auth);
                 card_body2.appendTo(card2);
             }
             $("html, body").scrollTop(0).animate({scrollTop: $("#list").offset().top});
@@ -79,7 +107,7 @@
         layui.use('laypage', function(){
             $.ajax({
                 type: "post",
-                url: "/project",
+                url: "/getuser",
                 data: {},
                 dataType:'json',
                 success: function (data) {
@@ -130,11 +158,11 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    欢迎：<span><title sec:authentication="name"></title></span>
+                    欢迎：<span sec:authentication="name"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
+                    <dd><a href="">系统说明</a></dd>
                 </dl>
             </li>
             <li class="layui-nav-item"><a href="/index">退出</a></li>
@@ -156,7 +184,6 @@
                     <a href="javascript:;">用户管理</a>
                     <dl class="layui-nav-child">
                         <dd><a href="">用户一览</a></dd>
-                        <dd><a href="">新增用户</a></dd>
                         <dd><a href="">权限设置</a></dd>
                     </dl>
                 </li>

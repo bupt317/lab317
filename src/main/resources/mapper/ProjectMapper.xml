@@ -21,6 +21,10 @@
         SELECT * FROM project WHERE projectname=#{value}
     </select>
 
+    <select id="selectbyid" parameterType="java.lang.Integer" resultType="com.bupt317.study.lab_manager.pojo.mybatis.Project">
+        SELECT * FROM project WHERE id=#{value}
+    </select>
+
     <select id="selectbyprojectstate" parameterType="java.lang.String" resultType="com.bupt317.study.lab_manager.pojo.mybatis.Project">
         SELECT * FROM project WHERE projectstate=#{value}
     </select>

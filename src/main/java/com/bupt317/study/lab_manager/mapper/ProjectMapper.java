@@ -16,6 +16,8 @@ public interface ProjectMapper
 
     Project selectbyprojectname(String projectname);
 
+    Project selectbyid(int id);
+
     List<Project> selectbyprojectstate(String projectstate);
 
     List<Project> selectall();
