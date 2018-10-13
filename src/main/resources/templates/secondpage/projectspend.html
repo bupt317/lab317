@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>新建项目</title>
+    <title>新建花销</title>
     <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css">
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
     <script th:src="@{/js/layui/layui.js}"></script>
@@ -14,19 +14,28 @@
         layui.use('laydate', function(){
             var laydate = layui.laydate;
 
-            //执行一个laydate实例
             laydate.render({
-                elem: '#starttime',//指定元素
-                format: 'yyyy-MM-dd'
+                elem: '#spenddate',//指定元素
+                format: 'yyyy年MM月dd日'
             });
         });
 
-        layui.use('laydate', function(){
-            var laydate = layui.laydate;
-            //执行一个laydate实例
-            laydate.render({
-                elem: '#endtime',//指定元素
-                format: 'yyyy-MM-dd'
+        layui.use('form', function () {
+            var form = layui.form;
+            var select = $("#projectname");
+            $.ajax({
+                type:"post",
+                url:"/u/project",
+                contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                data:{},
+                dataType:"json",
+                success:function (data) {
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        select.append(new Option(data[i].projectname, i))
+                    }
+                    form.render();
+                }
             });
         });
 
@@ -34,18 +43,18 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function(data){
-                var form_data = "projectname="+data.field.projectname+"&member="+data.field.member+"&projectmessage="+data.field.projectmessage+
-                    "&starttime="+data.field.starttime+"&endtime="+data.field.endtime+"&projectstate="+data.field.projectstate;
+                var form_data = "projectname="+data.field.projectname+"&money="+data.field.money+"&spenddate="+data.field.spenddate+
+                    "&attention="+data.field.attention;
                 $.ajax({
                     type: "post",
-                    url: "/program_new",
+                    url: "/u/projectspend_new",//////新建花销接口
                     contentType: "application/x-www-form-urlencoded;charset=utf-8",
                     data: form_data,
                     dataType: "text",
                     success: function (site) {
                         if (site == "Y"){
                             layer.msg("创建成功！");
-                            setTimeout(function () {window.location.replace("/program");}, 2000);
+                            setTimeout(function () {window.location.replace("/u/program");}, 2000);
                         }else {
                             layer.msg("通信错误");
                         }
@@ -55,17 +64,6 @@
             });
         });
 
-        function clean() {
-            sessionStorage.clear();
-        }
-
-        function isSession() {
-            username = sessionStorage.getItem("Username");
-            if (username == null){
-                window.location.replace("/index")
-            }
-        }
-
     </script>
 </head>
 <body class="layui-layout-body">
@@ -74,7 +72,7 @@
         <div class="layui-logo" style="font-size: 20px;">317财务管理系统</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="/home">主页</a></li>
+            <li class="layui-nav-item"><a href="/u/home">主页</a></li>
             <li class="layui-nav-item"><a href="">帮助</a></li>
             <li class="layui-nav-item"><a href="">用户</a></li>
             <li class="layui-nav-item">
@@ -96,7 +94,7 @@
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="/login_out">退出</a></li>
+            <li class="layui-nav-item"><a href="/index">退出</a></li>
         </ul>
     </div>
 
@@ -107,8 +105,9 @@
                 <li class="layui-nav-item">
                     <a class="" href="javascript:;">项目管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/program">项目列表</a></dd>
-                        <dd><a href="/secondpage/new">新建项目</a></dd>
+                        <dd><a href="/u/program">项目列表</a></dd>
+                        <dd><a href="/u/program/new">新建项目</a></dd>
+                        <dd><a href="/u/program/projectspend">新建花销</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -141,43 +140,30 @@
         <form class="layui-form" action="">
             <div class="layui-form-item">
                 <label class="layui-form-label">项目名称</label>
-                <div class="layui-input-block">
-                    <input type="text" id="projectname" name="projectname" lay-verify="required" placeholder="请输入项目名称" class="layui-input" style="width: 1130px">
+                <div class="layui-input-block" style="width: 1130px">
+                    <select name="projectname" id="projectname" lay-verify="required">
+                        <option value=""></option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">参与人员</label>
+                <label class="layui-form-label">花销金额</label>
                 <div class="layui-input-block">
-                    <input type="text" id="member" name="member"  lay-verify="required" placeholder="请输入参与人员" class="layui-input" style="width: 1130px">
+                    <input type="text" id="money" name="money" lay-verify="required" placeholder="请输入花销金额" class="layui-input" style="width: 1130px">
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">起始日期</label>
+                    <label class="layui-form-label">花销日期</label>
                     <div class="layui-input-inline">
-                        <input name="starttime" id="starttime" lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" style="width: 1130px">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">截止日期</label>
-                    <div class="layui-input-inline">
-                        <input name="endtime" id="endtime" lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" style="width: 1130px">
+                        <input name="spenddate" id="spenddate" lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" style="width: 1130px">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">项目详情</label>
+                <label class="layui-form-label">花销详情</label>
                 <div class="layui-input-block">
-                    <textarea id="projectmessage" name="projectmessage" lay-verify="required" placeholder="请输入内容" class="layui-textarea" style="width: 1130px"></textarea>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">项目状态</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="projectstate" value="N" title="未结项">
-                    <input type="radio" name="projectstate" value="Y" title="已结项">
+                    <textarea id="attention" name="attention" lay-verify="required" placeholder="请输入内容" class="layui-textarea" style="width: 1130px"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>新建项目</title>
+    <title>修改用户信息</title>
     <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css">
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
     <script th:src="@{/js/layui/layui.js}"></script>
@@ -16,17 +17,46 @@
 
             //执行一个laydate实例
             laydate.render({
-                elem: '#starttime',//指定元素
+                elem: '#birthday',//指定元素
                 format: 'yyyy-MM-dd'
             });
         });
 
-        layui.use('laydate', function(){
+        /*layui.use('laydate', function(){
             var laydate = layui.laydate;
             //执行一个laydate实例
             laydate.render({
                 elem: '#endtime',//指定元素
                 format: 'yyyy-MM-dd'
+            });
+        });*/
+
+        layui.use("layer", function () {
+            var id ='id='+ sessionStorage.getItem('id');
+
+            $.ajax({
+                type:"post",
+                url:"/getuserinfo_byid", ///////////////////  根据id获取数据，用于重写数据 //////////////////
+                contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                data:id,
+                dataType:"json",
+                success:function (obj) {
+                    /*console.log(obj);
+                    var projectstate = "";*/
+
+                    /*if (obj.projectstate == "Y"){
+                        projectstate = "Y";
+                    } else {
+                        projectstate = "N";
+                    }*/
+
+                    layui.form.val('reload',{
+                        "name": obj.name,
+                        "studentid": obj.studentid,
+                        "idcard": obj.idcard,
+                        "birthday": obj.birthday
+                    })
+                }
             });
         });
 
@@ -34,18 +64,18 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function(data){
-                var form_data = "projectname="+data.field.projectname+"&member="+data.field.member+"&projectmessage="+data.field.projectmessage+
-                    "&starttime="+data.field.starttime+"&endtime="+data.field.endtime+"&projectstate="+data.field.projectstate;
+                var form_data = "id="+sessionStorage.getItem('id')+"&name="+data.field.name+"&studentid="+data.field.studentid+
+                    "&idcard="+data.field.idcard+"&birthday="+data.field.birthday;
                 $.ajax({
                     type: "post",
-                    url: "/program_new",
+                    url: "/userinfo_alter",
                     contentType: "application/x-www-form-urlencoded;charset=utf-8",
                     data: form_data,
                     dataType: "text",
                     success: function (site) {
                         if (site == "Y"){
-                            layer.msg("创建成功！");
-                            setTimeout(function () {window.location.replace("/program");}, 2000);
+                            layer.msg("修改成功");
+                            setTimeout(function () {window.location.replace("/usermanager");}, 2000);
                         }else {
                             layer.msg("通信错误");
                         }
@@ -55,7 +85,7 @@
             });
         });
 
-        function clean() {
+        /*function clean() {
             sessionStorage.clear();
         }
 
@@ -64,7 +94,7 @@
             if (username == null){
                 window.location.replace("/index")
             }
-        }
+        }*/
 
     </script>
 </head>
@@ -89,14 +119,14 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    欢迎：<span><title sec:authentication="name"></title></span>
+                    欢迎：<span sec:authentication="name"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
+                    <dd><a href="">系统说明</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="/login_out">退出</a></li>
+            <li class="layui-nav-item"><a href="/index">退出</a></li>
         </ul>
     </div>
 
@@ -105,7 +135,7 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree"  lay-filter="test">
                 <li class="layui-nav-item">
-                    <a class="" href="javascript:;">项目管理</a>
+                    <a href="javascript:;">项目管理</a>
                     <dl class="layui-nav-child">
                         <dd><a href="/program">项目列表</a></dd>
                         <dd><a href="/secondpage/new">新建项目</a></dd>
@@ -138,39 +168,45 @@
     </div>
 
     <div class="layui-body" style="background-color: #f2f2f2; padding: 20px">
-        <form class="layui-form" action="">
+        <form class="layui-form" action="" lay-filter = "reload">
             <div class="layui-form-item">
-                <label class="layui-form-label">项目名称</label>
+                <label class="layui-form-label">姓名</label>
                 <div class="layui-input-block">
-                    <input type="text" id="projectname" name="projectname" lay-verify="required" placeholder="请输入项目名称" class="layui-input" style="width: 1130px">
+                    <input type="text" id="name" name="name" required lay-verify="required" placeholder="请输入姓名" class="layui-input" style="width: 1130px">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">参与人员</label>
+                <label class="layui-form-label">学号</label>
                 <div class="layui-input-block">
-                    <input type="text" id="member" name="member"  lay-verify="required" placeholder="请输入参与人员" class="layui-input" style="width: 1130px">
+                    <input type="text" id="studentid" name="studentid" required lay-verify="required" placeholder="请输入学号" class="layui-input" style="width: 1130px">
                 </div>
             </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证号</label>
+                <div class="layui-input-block">
+                    <input type="text" id="idcard" name="idcard" required lay-verify="required" placeholder="请输入身份证号" class="layui-input" style="width: 1130px">
+                </div>
+            </div>
+            <!--<div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">身份证号</label>
+                    <div class="layui-input-inline">
+                        <input name="starttime" id="starttime" required lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" style="width: 1130px">
+                    </div>
+                </div>
+            </div>-->
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">起始日期</label>
+                    <label class="layui-form-label">生日</label>
                     <div class="layui-input-inline">
-                        <input name="starttime" id="starttime" lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" style="width: 1130px">
+                        <input name="birthday" id="birthday" required lay-verify="required" placeholder="xxxx年xx月xx日" class="layui-input" type="text" style="width: 1130px">
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">截止日期</label>
-                    <div class="layui-input-inline">
-                        <input name="endtime" id="endtime" lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" style="width: 1130px">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
+            <!--<div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">项目详情</label>
                 <div class="layui-input-block">
-                    <textarea id="projectmessage" name="projectmessage" lay-verify="required" placeholder="请输入内容" class="layui-textarea" style="width: 1130px"></textarea>
+                    <textarea id="projectmessage" name="projectmessage" required lay-verify="required" placeholder="请输入内容" class="layui-textarea" style="width: 1130px"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -179,7 +215,7 @@
                     <input type="radio" name="projectstate" value="N" title="未结项">
                     <input type="radio" name="projectstate" value="Y" title="已结项">
                 </div>
-            </div>
+            </div>-->
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>

@@ -16,7 +16,7 @@
     </delete>
 
     <update id="updatebyid" parameterType="com.bupt317.study.lab_manager.pojo.mybatis.User">
-        UPDATE user SET authority=#{authority},password=#{password} WHERE id=#{id}
+        UPDATE user SET authority=#{authority} WHERE id=#{id}
     </update>
 
     <select id="selectall" resultType="com.bupt317.study.lab_manager.pojo.mybatis.User">

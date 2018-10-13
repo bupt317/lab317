@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>主页</title>
@@ -31,7 +32,7 @@
         <div class="layui-logo" style="font-size: 20px;">317财务管理系统</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="/u/home">主页</a></li>
+            <li class="layui-nav-item"><a href="/home">主页</a></li>
             <li class="layui-nav-item"><a href="">帮助</a></li>
             <li class="layui-nav-item">
                 <a href="javascript:;">其它系统</a>
@@ -45,14 +46,14 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    欢迎：<span><title sec:authentication="name"></title></span>
+                    欢迎：<span sec:authentication="name"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
+                    <dd><a href="">系统说明</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="/index">退出</a></li>
+            <li class="layui-nav-item"><a href="/login_out">退出</a></li>
         </ul>
     </div>
 
@@ -63,14 +64,15 @@
                 <li class="layui-nav-item">
                     <a class="" href="javascript:;">项目管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/u/program">项目列表</a></dd>
-                        <dd><a href="/u/program/new">新建项目</a></dd>
+                        <dd><a href="/program">项目列表</a></dd>
+                        <dd><a href="/secondpage/new">新建项目</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">用户管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">权限设置</a></dd>
+                        <dd><a href="/usermanager">用户一览</a></dd>
+                        <dd><a href="/authmanager">权限设置</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">

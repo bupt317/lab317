@@ -15,7 +15,8 @@
         });
 
         layui.use("layer", function () {
-            var data = "id="+window.sessionStorage.getItem("id");
+            var data = "projectname="+window.sessionStorage.getItem("projectname");
+            console.log(window.sessionStorage.getItem("projectname"));
             money = [];
             date = [];
             var projectname = null;
@@ -27,6 +28,7 @@
                 data: data,
                 dataType: "json",
                 success: function (data) {
+                    console.log(data);
                     $.each(data, function (i, val) {
                         money[i] = val.money;
                         date[i] = val.spenddate;
@@ -118,7 +120,7 @@
         <div class="layui-logo" style="font-size: 20px;">317财务管理系统</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="/u/home">主页</a></li>
+            <li class="layui-nav-item"><a href="/home">主页</a></li>
             <li class="layui-nav-item"><a href="">帮助</a></li>
             <li class="layui-nav-item"><a href="">用户</a></li>
             <li class="layui-nav-item">

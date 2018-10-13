@@ -5,6 +5,7 @@ import com.bupt317.study.lab_manager.pojo.mybatis.ProjectSpend;
 import com.bupt317.study.lab_manager.pojo.mybatis.User;
 import com.bupt317.study.lab_manager.service.ProjectService;
 import com.bupt317.study.lab_manager.service.ProjectSpendService;
+import com.bupt317.study.lab_manager.service.UserInformationService;
 import com.bupt317.study.lab_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -27,6 +28,8 @@ public class FirstProjectController
     ProjectService projectService;
     @Autowired
     ProjectSpendService projectSpendService;
+    @Autowired
+    UserInformationService userInformationService;
 
 
     //权限不足访问页面
@@ -108,6 +111,15 @@ public class FirstProjectController
         return projects;
     }
 
+    //根据id查询program
+    @RequestMapping(value = ("/program_byid"),method = RequestMethod.POST)
+    @ResponseBody
+    public Project getprogrambyid(int id)
+    {
+        Project project=projectService.getbyid(id);
+        return project;
+    }
+
     //新建program
     @RequestMapping(value = "/program_new",method = RequestMethod.POST)
     @ResponseBody
@@ -121,9 +133,10 @@ public class FirstProjectController
     //修改program
     @RequestMapping(value = "/program_alter",method = RequestMethod.POST)
     @ResponseBody
-    public String updateprogram(int id,String projectname,String member,String projectmessage,String starttime,String endtime,String projectstate)
+    public String updateprogram(String id,String projectname,String member,String projectmessage,String starttime,String endtime,String projectstate)
     {
-        Project project=projectService.projectbuilder(id,projectname,member,projectmessage,starttime,endtime,projectstate);
+        int nid=Integer.parseInt(id);
+        Project project=projectService.projectbuilder(nid,projectname,member,projectmessage,starttime,endtime,projectstate);
         String site=projectService.updateproject(project);
         return site;
     }
@@ -135,6 +148,7 @@ public class FirstProjectController
     {
         List<ProjectSpend> projectSpends=new ArrayList<ProjectSpend>();
         projectSpends=projectSpendService.getbyprojectname(projectname);
+        //System.out.println(projectname);
         return projectSpends;
     }
 
@@ -158,10 +172,12 @@ public class FirstProjectController
         {
             BCryptPasswordEncoder bcpe=new BCryptPasswordEncoder();
             String bcpasword=bcpe.encode(password);
-            System.out.println(bcpasword);
+            //System.out.println(bcpasword);
             User user=userService.userbuilder(0,"M",username,bcpasword);
-            if (userService.adduser(user).equals("Y"))
-                return "/index";
+            String adduserback=userService.adduser(user);
+            String adduserinformationback=userInformationService.addwithuser(username,"unknown",studentid);
+            if (adduserback.equals("Y")&&adduserinformationback.equals("Y"))//写入数据库
+                    return "/index";
             else
                 return "/register";
         }

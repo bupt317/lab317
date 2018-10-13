@@ -65,6 +65,13 @@ public class ProjectService
         return project;
     }
 
+    //根据工程id查询
+    public Project getbyid(int id)
+    {
+        Project project=projectMapper.selectbyid(id);
+        return project;
+    }
+
     //根据工程状态查询
     public List<Project> getbyprojectstate(String projectstate)
     {
