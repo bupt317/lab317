@@ -2,7 +2,7 @@
 <html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>主页</title>
+    <title>入账一览</title>
     <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css">
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
     <script th:src="@{/js/layui/layui.js}"></script>
@@ -11,21 +11,7 @@
         layui.use('element', function(){
             var element = layui.element;
         });
-        ///////////////////// 获取登录用户名///////////////////////////
-        layui.use("layer", function () {
-            username = "username="+sessionStorage.getItem('Username');
-            $.ajax({
-                type:"post",
-                url:"/u/home_data",
-                contentType: "application/x-www-form-urlencoded;charset=utf-8",
-                data:username,
-                dataType:"json",
-                success:function (obj) {
-                    $("#name").text(obj.name);
-                }
-            });
-        });
-        //////////////////////////////////////////////////////////////
+
         layui.use('carousel', function(){
             var carousel = layui.carousel;
             //建造实例
@@ -59,7 +45,7 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    欢迎：<span  id="name"></span>
+                    欢迎：<span><title sec:authentication="name"></title></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
@@ -109,15 +95,24 @@
 
     <div class="layui-body" style="background-color: #f2f2f2; padding: 20px">
         <!-- 内容主体区域 -->
-        <div class="layui-carousel" id="round">
-            <div carousel-item>
-                <div>条目1</div>
-                <div>条目2</div>
-                <div>条目3</div>
-                <div>条目4</div>
-                <div>条目5</div>
-            </div>
-        </div>
+        <table class="layui-hide" id="test"></table>
+        <script>
+            layui.use('table', function(){
+                var table = layui.table;
+
+                table.render({
+                    elem: '#test'
+                    ,url:'/demo/table/user/'
+                    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    ,cols: [[
+                        {field:'gaindate', width:80, title: '入账时间', sort: true}
+                        ,{field:'money', width:80, title: '金额'}
+                        ,{field:'attention', width:80, title: '备注', sort: true}
+                        ,{field:'more', title: '更多', width: '30%', minWidth: 100}
+                    ]]
+                });
+            });
+        </script>
     </div>
     <div class="layui-footer" style="text-align: center; background-color: #f2f2f2">
         <!-- 底部固定区域 -->

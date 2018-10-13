@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>入账修改</title>
+    <title>工资修改</title>
     <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css">
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
     <script th:src="@{/js/layui/layui.js}"></script>
@@ -16,7 +16,7 @@
 
             //执行一个laydate实例
             laydate.render({
-                elem: '#inputtime',//指定元素
+                elem: '#senddate',//指定元素
                 format: 'yyyy年MM月dd日'
             });
         });
@@ -27,16 +27,16 @@
 
             $.ajax({
                 type:"post",
-                url:"/u/finance_input_alter", ///////////////////  根据id获取数据，用于重写数据 //////////////////
+                url:"/u/finance_salary_alter", ///////////////////  根据id获取数据，用于重写数据 //////////////////
                 contentType: "application/x-www-form-urlencoded;charset=utf-8",
                 data:id,
                 dataType:"json",
                 success:function (obj) {
 
                     form.val('reload',{
-                        "inputtime": obj.inputtime,
-                        "inputmoney":obj.inputmoney,
-                        "inputmessage": obj.inputmessage
+                        "senddate": obj.senddate,
+                        "salary":obj.salary,
+                        "attention": obj.attention
                     })
                 }
             });
@@ -46,18 +46,18 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function(data){
-                var form_data = "inputtime="+data.field.inputtime+"&inputmessage="+data.field.inputmessage+
-                        "&inputtime="+data.field.inputtime;
+                var form_data = "senddate="+data.field.senddate+"&attention="+data.field.attention+
+                        "&attention="+data.field.attention;
                 $.ajax({
                     type: "post",
-                    url: "/finance_input_alter",
+                    url: "/finance_salary_alter",
                     contentType: "application/x-www-form-urlencoded;charset=utf-8",
                     data: form_data,
                     dataType: "text",
                     success: function (site) {
                         if (site == "Y"){
                             layer.msg("修改成功！");
-                            setTimeout(function () {window.location.replace("/u/program");}, 2000);
+                            setTimeout(function () {window.location.replace("/u/salary");}, 2000);
                         }else {
                             layer.msg("通信错误");
                         }
@@ -153,24 +153,24 @@
         <form class="layui-form" action="" lay-filter = "reload">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">入账时间</label>
+                    <label class="layui-form-label">派发时间</label>
                     <div class="layui-input-inline">
-                        <input name="inputtime" id="inputtime" required lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" >
+                        <input name="senddate" id="senddate" required lay-verify="required" placeholder="yyyy年MM月dd日" class="layui-input" type="text" >
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">入账金额</label>
+                    <label class="layui-form-label">派发金额</label>
                     <div class="layui-input-inline">
-                        <input name="inputmoney" id="inputmoney" required lay-verify="required" placeholder="输入金额" class="layui-input" type="text" style="width: 200px">
+                        <input name="salary" id="salary" required lay-verify="required" placeholder="输入金额" class="layui-input" type="text" style="width: 200px">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">备注</label>
                 <div class="layui-input-block">
-                    <textarea id="inputmessage" name="inputmessage" required lay-verify="required" placeholder="请输入内容" class="layui-textarea" style="width: 500px"></textarea>
+                    <textarea id="attention" name="attention" required lay-verify="required" placeholder="请输入内容" class="layui-textarea" style="width: 500px"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
