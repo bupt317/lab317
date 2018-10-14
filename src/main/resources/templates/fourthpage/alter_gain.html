@@ -16,7 +16,7 @@
 
             //执行一个laydate实例
             laydate.render({
-                elem: '#inputtime',//指定元素
+                elem: '#gaindate',//指定元素
                 format: 'yyyy年MM月dd日'
             });
         });
@@ -27,16 +27,16 @@
 
             $.ajax({
                 type:"post",
-                url:"/u/finance_input_alter", ///////////////////  根据id获取数据，用于重写数据 //////////////////
+                url:"/u/finance_gain_alter", ///////////////////  根据id获取数据，用于重写数据 //////////////////
                 contentType: "application/x-www-form-urlencoded;charset=utf-8",
                 data:id,
                 dataType:"json",
                 success:function (obj) {
 
                     form.val('reload',{
-                        "inputtime": obj.inputtime,
-                        "inputmoney":obj.inputmoney,
-                        "inputmessage": obj.inputmessage
+                        "gaindate": obj.gaindate,
+                        "money":obj.money,
+                        "attention": obj.attention
                     })
                 }
             });
@@ -46,11 +46,11 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function(data){
-                var form_data = "inputtime="+data.field.inputtime+"&inputmessage="+data.field.inputmessage+
-                        "&inputtime="+data.field.inputtime;
+                var form_data = "gaindate="+data.field.gaindate+"&attention="+data.field.attention+
+                        "&money="+data.field.money;
                 $.ajax({
                     type: "post",
-                    url: "/finance_input_alter",
+                    url: "/finance_gain_alter",
                     contentType: "application/x-www-form-urlencoded;charset=utf-8",
                     data: form_data,
                     dataType: "text",
